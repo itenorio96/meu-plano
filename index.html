@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Meu Plano — Fase 1</title>
+<meta name="theme-color" content="#0f1419">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Meu Plano">
+<style>
+  :root{
+    --bg:#0f1419; --card:#1a212b; --card2:#222c38; --line:#2c3743;
+    --txt:#e7edf3; --muted:#8a99a8; --accent:#4cc2ff; --accent2:#2e9e6b;
+    --warn:#e0a23c; --bad:#e06a5c; --good:#3ec07a;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:78px;line-height:1.45}
+  header{padding:18px 16px 12px;background:linear-gradient(160deg,#16202b,#0f1419);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+  h1{font-size:17px;margin:0 0 2px}
+  h2{font-size:15px;margin:18px 0 8px;color:var(--accent)}
+  h3{font-size:14px;margin:14px 0 6px}
+  .sub{color:var(--muted);font-size:12.5px}
+  .wrap{max-width:680px;margin:0 auto;padding:14px 14px 30px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin:12px 0}
+  .row{display:flex;gap:10px;align-items:center}
+  .between{justify-content:space-between}
+  .grid{display:grid;gap:10px}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:1fr 1fr 1fr}
+  .g4{grid-template-columns:1fr 1fr 1fr 1fr}
+  button{font-family:inherit;cursor:pointer;border:none;border-radius:10px;font-size:14px}
+  .toggle{padding:14px 10px;background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:12px;width:100%;display:flex;flex-direction:column;align-items:center;gap:6px;transition:.15s}
+  .toggle .ic{font-size:20px}
+  .toggle small{color:var(--muted);font-size:11px}
+  .toggle.on{background:rgba(62,192,122,.16);border-color:var(--good);color:#fff}
+  .toggle.on small{color:var(--good)}
+  .pill{font-size:11px;padding:3px 9px;border-radius:999px;background:var(--card2);color:var(--muted);border:1px solid var(--line)}
+  .pill.ok{background:rgba(62,192,122,.15);color:var(--good);border-color:transparent}
+  .pill.run{background:rgba(76,194,255,.16);color:var(--accent);border-color:transparent}
+  .pill.warn{background:rgba(224,162,60,.16);color:var(--warn);border-color:transparent}
+  .stepper{display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .stepper button{background:var(--card2);color:var(--txt);width:42px;height:40px;font-size:20px}
+  .stepper .val{min-width:60px;text-align:center;font-weight:600}
+  .datebar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .datebar button{background:var(--card2);color:var(--txt);width:40px;height:38px;border-radius:10px;font-size:18px}
+  .datebar .d{font-weight:600;font-size:14px;text-align:center;flex:1}
+  .bar{height:8px;border-radius:999px;background:var(--card2);overflow:hidden;margin-top:6px}
+  .bar > i{display:block;height:100%;background:var(--accent);border-radius:999px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+  th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}
+  td.n,th.n{text-align:right;white-space:nowrap}
+  .ex{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px;gap:10px}
+  .ex:last-child{border-bottom:none}
+  .ex b{color:var(--accent);font-weight:600;white-space:nowrap}
+  .note{font-size:12.5px;color:var(--muted)}
+  .callout{background:rgba(76,194,255,.08);border:1px solid rgba(76,194,255,.25);border-radius:12px;padding:11px 12px;font-size:12.5px;margin:10px 0}
+  .callout.warn{background:rgba(224,162,60,.09);border-color:rgba(224,162,60,.3)}
+  .btn{background:var(--accent);color:#04222f;font-weight:700;padding:13px;width:100%;margin-top:8px}
+  .btn.ghost{background:var(--card2);color:var(--txt);border:1px solid var(--line);font-weight:600}
+  .btn.go{background:var(--good);color:#06231a}
+  .btn.stop{background:var(--bad);color:#2a0a06}
+  .btn.sm{padding:10px;font-size:13px;margin-top:0}
+  nav{position:fixed;bottom:0;left:0;right:0;background:#11181f;border-top:1px solid var(--line);display:flex;z-index:10}
+  nav button{flex:1;background:none;color:var(--muted);padding:9px 1px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px}
+  nav button .ic{font-size:17px}
+  nav button.active{color:var(--accent)}
+  .tab{display:none}
+  .tab.show{display:block;animation:f .2s ease}
+  @keyframes f{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+  .future{opacity:.6}
+  .tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:6px;background:var(--card2);color:var(--muted);margin-left:6px}
+  .big{font-size:26px;font-weight:700}
+  .center{text-align:center}
+  .hr{height:1px;background:var(--line);margin:14px 0}
+  input[type=date],input[type=number]{background:var(--card2);border:1px solid var(--line);color:var(--txt);border-radius:8px;padding:9px;font-family:inherit;font-size:14px}
+  input[type=number]{width:100%;text-align:center}
+  .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%);background:#2e9e6b;color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;z-index:30;opacity:0;transition:.25s;pointer-events:none}
+  .toast.show{opacity:1}
+  /* calendário */
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+  .cal .h{text-align:center;font-size:10.5px;color:var(--muted);padding:3px 0}
+  .cal .cell{aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12.5px;background:var(--card2);color:var(--muted);border:1px solid transparent}
+  .cal .cell.empty{background:transparent}
+  .cal .cell.pre{opacity:.25}
+  .cal .cell.green{background:rgba(62,192,122,.85);color:#06231a;font-weight:700}
+  .cal .cell.blue{background:rgba(76,194,255,.7);color:#04222f;font-weight:700}
+  .cal .cell.today{outline:2px solid var(--accent);outline-offset:1px}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;margin-top:4px}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .dot{width:13px;height:13px;border-radius:4px;display:inline-block}
+  /* sessão */
+  .sw{font-size:44px;font-weight:800;letter-spacing:.02em;text-align:center;font-variant-numeric:tabular-nums}
+  .rest{font-size:30px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;color:var(--accent)}
+  .rest.alarm{color:var(--bad);animation:blink .4s linear 4}
+  @keyframes blink{50%{opacity:.2}}
+  .exblock{border-bottom:1px solid var(--line);padding:11px 0}
+  .exblock:last-child{border-bottom:none}
+  .exhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .exhead .nm{font-size:13.5px;font-weight:600}
+  .pr{font-size:11.5px;color:var(--good);white-space:nowrap}
+  .pr.none{color:var(--muted)}
+  .sugg{font-size:11px;color:var(--accent);font-weight:700;background:rgba(76,194,255,.12);padding:1px 6px;border-radius:6px;margin-left:2px;white-space:nowrap}
+  .setline{font-size:11.5px;color:var(--muted);margin:4px 0 7px}
+  .inputs{display:grid;grid-template-columns:1fr 1fr auto;gap:7px}
+  .inputs button{background:var(--accent);color:#04222f;font-weight:700;padding:0 16px;border-radius:8px}
+  /* badges semanas */
+  .wkcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}
+  .badges{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px}
+  .badge{font-size:11.5px;padding:5px 9px;border-radius:8px;background:var(--card2);color:var(--muted);display:flex;align-items:center;gap:5px;border:1px solid var(--line)}
+  .badge.hit{background:rgba(62,192,122,.16);color:var(--good);border-color:transparent}
+  .badge.miss{background:rgba(224,106,92,.12);color:var(--bad);border-color:transparent}
+  .badge.warn{background:rgba(224,162,60,.14);color:var(--warn);border-color:transparent}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="padding:0">
+    <h1>Meu Plano · <span style="color:var(--accent)">Fase 1</span></h1>
+    <div class="sub" id="cycleHeader">Recomposição — corte leve</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= HOJE ================= -->
+  <section class="tab show" id="tab-hoje">
+    <div class="card">
+      <div class="datebar">
+        <button onclick="changeDay(-1)">‹</button>
+        <div class="d" id="dayLabel">Hoje</div>
+        <button onclick="changeDay(1)" id="nextBtn">›</button>
+      </div>
+    </div>
+
+    <h2>Peso em jejum</h2>
+    <div class="card">
+      <div class="row between">
+        <div><div style="font-weight:600">Peso de hoje</div><div class="note">registre de manhã, em jejum</div></div>
+        <div class="row" style="gap:6px">
+          <input type="number" inputmode="decimal" step="0.1" id="weightInput" placeholder="kg" style="width:96px" onchange="setWeight()">
+          <span class="note">kg</span>
+        </div>
+      </div>
+    </div>
+
+    <h2>Treino</h2>
+    <div class="card">
+      <div class="grid g2">
+        <button class="toggle" data-k="judo" onclick="toggle('judo')"><span class="ic">🥋</span>Judô<small>meta 2/sem</small></button>
+        <button class="toggle" data-k="cardio" onclick="toggle('cardio')"><span class="ic">🚴</span>Cardio<small>meta 2-3/sem</small></button>
+      </div>
+    </div>
+
+    <h2>Sessão de musculação</h2>
+    <div class="card" id="sessionCard"><!-- render JS --></div>
+
+    <h2>Alimentação</h2>
+    <div class="card">
+      <button class="toggle" data-k="dieta" onclick="toggle('dieta')" style="flex-direction:row;justify-content:center;gap:10px"><span class="ic">🍽️</span> Dieta cumprida hoje</button>
+      <div class="hr"></div>
+      <div class="row between">
+        <div>
+          <div style="font-weight:600">Refeição livre</div>
+          <div class="note">registradas hoje</div>
+        </div>
+        <div class="stepper">
+          <button onclick="freeMeal(-1)">−</button>
+          <div class="val" id="freeDayVal">0</div>
+          <button onclick="freeMeal(1)">+</button>
+        </div>
+      </div>
+      <div class="callout" id="freeWeekBox" style="margin-bottom:0">
+        Refeições livres nesta semana: <b id="freeWeekVal">0</b> / <b id="freeWeekMax">2</b>
+      </div>
+    </div>
+
+    <h2>Vitaminas & suplementos</h2>
+    <div class="card">
+      <div class="grid g3">
+        <button class="toggle" data-k="vitD" onclick="toggle('vitD')"><span class="ic">☀️</span>Vitamina D</button>
+        <button class="toggle" data-k="b12" onclick="toggle('b12')"><span class="ic">🩸</span>B12</button>
+        <button class="toggle" data-k="multi" onclick="toggle('multi')"><span class="ic">💊</span>Multivitamínico</button>
+        <button class="toggle" data-k="creatina" onclick="toggle('creatina')"><span class="ic">⚡</span>Creatina</button>
+        <button class="toggle" data-k="sono" onclick="toggle('sono')"><span class="ic">😴</span>Sono<small>melatonina+</small></button>
+      </div>
+      <button class="btn ghost" onclick="allSupps()" style="margin-top:10px">Marcar todas como tomadas</button>
+    </div>
+  </section>
+
+  <!-- ================= CALENDÁRIO (treino) ================= -->
+  <section class="tab" id="tab-cal">
+    <div class="card">
+      <div class="datebar">
+        <button onclick="changeMonth(-1)">‹</button>
+        <div class="d" id="monthLabel"></div>
+        <button onclick="changeMonth(1)" id="nextMonthBtn">›</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="cal" id="calGrid"></div>
+      <div class="hr"></div>
+      <div class="legend">
+        <span><i class="dot" style="background:rgba(62,192,122,.85)"></i>Musculação</span>
+        <span><i class="dot" style="background:rgba(76,194,255,.7)"></i>Só judô/cardio</span>
+        <span><i class="dot" style="background:var(--card2)"></i>Sem treino</span>
+      </div>
+      <div class="note" style="margin-top:8px">Registro de treino: verde = fez musculação · azul = só judô/cardio. Toque num dia para ver/editar.</div>
+    </div>
+    <div class="card" id="calStats"></div>
+  </section>
+
+  <!-- ================= SEMANAS (avaliação) ================= -->
+  <section class="tab" id="tab-semanas">
+    <h2>Ciclo atual</h2>
+    <div class="card">
+      <div class="row between"><div style="font-weight:600">Fase 1 — Recomposição</div><span class="pill ok">em andamento</span></div>
+      <div class="hr"></div>
+      <div class="grid g2">
+        <div><div class="note">Início</div><input type="date" id="startInput" onchange="setStart()"></div>
+        <div><div class="note">Término previsto</div><div id="endDate" style="font-weight:600;padding-top:8px"></div></div>
+      </div>
+      <div class="callout center" id="countdownBox" style="margin-top:12px"></div>
+      <div class="bar"><i id="cycleBar"></i></div>
+      <div class="note center" id="cycleProgressTxt" style="margin-top:6px"></div>
+      <div class="hr"></div>
+      <div class="ex"><span>Meta de peso</span><b>84 → 80-81 kg</b></div>
+      <div class="ex"><span>Gordura</span><b>~19% → ~14-15%</b></div>
+      <div class="ex"><span>Reavaliação</span><b>semana 7 (+ deload)</b></div>
+    </div>
+
+    <h2>Avaliação semanal</h2>
+    <div class="note" style="margin:-4px 0 6px">Metas: judô ≥2 · musculação ≥3 · cardio ≥2 · dieta ≥6/7 · vitaminas ≥6/7 · livres ≤2.</div>
+    <div id="weeksList"></div>
+
+    <h2>Próximos ciclos <span class="tag">prévia</span></h2>
+    <div class="card future">
+      <div class="ex"><span><b>Fase 2</b> — Bulking limpo</span><b>~16-18 sem</b></div>
+      <div class="ex"><span><b>Fase 3</b> — Mini-corte</span><b>~6-8 sem</b></div>
+      <div class="ex"><span><b>Fase 4</b> — Lean bulk 2</span><b>até 12 meses</b></div>
+      <div class="note" style="margin-top:8px">Detalhados ao fim da Fase 1, na reavaliação.</div>
+    </div>
+  </section>
+
+  <!-- ================= TREINO (plano) ================= -->
+  <section class="tab" id="tab-treino">
+    <h2>Estrutura da semana</h2>
+    <div class="card">
+      <table>
+        <tr><th>Dia</th><th>Noite</th><th>Manhã (opc.)</th></tr>
+        <tr><td>Seg</td><td>Superior A</td><td>Bike Z2 25-35′</td></tr>
+        <tr><td>Ter</td><td>Judô</td><td>—</td></tr>
+        <tr><td>Qua</td><td>Superior B</td><td>Bike Z2 25-35′</td></tr>
+        <tr><td>Qui</td><td>Judô</td><td>—</td></tr>
+        <tr><td>Sex</td><td>Inferior</td><td>—</td></tr>
+        <tr><td>Sáb</td><td>Descanso ativo</td><td>Bike / caminhada</td></tr>
+        <tr><td>Dom</td><td>Descanso</td><td>—</td></tr>
+      </table>
+      <div class="note" style="margin-top:8px">Perna sempre seguida de descanso e nunca véspera de judô.</div>
+    </div>
+
+    <h2>Recordes (PRs)</h2>
+    <div class="card" id="prList"></div>
+
+    <div class="callout">
+      <b>Progressão:</b> trabalhe na faixa de reps. Bateu o topo em todas as séries com boa forma → sobe a carga. Pare com 2-3 reps na reserva (RPE 7-8). Descanso: 2-3 min nos compostos, 60-90s nos isoladores.
+    </div>
+
+    <h2>Volume semanal por músculo</h2>
+    <div class="card">
+      <div class="note" style="margin-bottom:6px">Tronco treinado 2×/semana (Superior A + B). Faixa-alvo para intermediário natural: MEV ~4-8 · MAV ~12-20 séries/sem.</div>
+      <table>
+        <tr><th>Músculo</th><th class="n">Séries/sem</th><th class="n">Freq.</th></tr>
+        <tr><td>Costas</td><td class="n">12</td><td class="n">2×</td></tr>
+        <tr><td>Peito</td><td class="n">9</td><td class="n">2×</td></tr>
+        <tr><td>Deltóide lateral</td><td class="n">8 ↗</td><td class="n">2×</td></tr>
+        <tr><td>Quadríceps</td><td class="n">8 (+judô)</td><td class="n">1×</td></tr>
+        <tr><td>Posterior de coxa</td><td class="n">6</td><td class="n">1×</td></tr>
+        <tr><td>Bíceps</td><td class="n">6 (+puxadas)</td><td class="n">2×</td></tr>
+        <tr><td>Tríceps</td><td class="n">6 (+supinos)</td><td class="n">2×</td></tr>
+        <tr><td>Glúteo</td><td class="n">~6</td><td class="n">1×</td></tr>
+        <tr><td>Post. de ombro</td><td class="n">~5</td><td class="n">1-2×</td></tr>
+        <tr><td>Panturrilha</td><td class="n">4</td><td class="n">1×</td></tr>
+      </table>
+      <div class="note" style="margin-top:8px">↗ Lateral começa em 8 e sobe 1-2 séries/sem até ~14-16 (MAV) ao longo do ciclo — é a sua prioridade pro shape em V. Deload na semana 7.</div>
+    </div>
+
+    <h3>Dia 1 — Superior A</h3>
+    <div class="card">
+      <div class="ex"><span>Supino reto (barra/halt.)</span><b>3×6-10</b></div>
+      <div class="ex"><span>Remada curvada (barra)</span><b>3×8-12</b></div>
+      <div class="ex"><span>Desenvolvimento halteres</span><b>3×8-12</b></div>
+      <div class="ex"><span>Puxada alta (pegada aberta)</span><b>3×8-12</b></div>
+      <div class="ex"><span>Elevação lateral</span><b>4×12-20</b></div>
+      <div class="ex"><span>Tríceps corda</span><b>3×10-15</b></div>
+      <div class="ex"><span>Rosca direta</span><b>3×8-12</b></div>
+    </div>
+    <h3>Dia 2 — Inferior <span class="tag">+ core</span></h3>
+    <div class="card">
+      <div class="ex"><span>Agachamento</span><b>3×6-10</b></div>
+      <div class="ex"><span>Leg press</span><b>3×10-15</b></div>
+      <div class="ex"><span>Levantamento terra romeno (RDL)</span><b>3×8-12</b></div>
+      <div class="ex"><span>Cadeira flexora</span><b>3×10-15</b></div>
+      <div class="ex"><span>Cadeira extensora</span><b>2×12-15</b></div>
+      <div class="ex"><span>Elevação pélvica / hip thrust</span><b>3×12-15</b></div>
+      <div class="ex"><span>Panturrilha em pé</span><b>4×12-20</b></div>
+    </div>
+    <h3>Dia 3 — Superior B</h3>
+    <div class="card">
+      <div class="ex"><span>Supino inclinado halteres</span><b>3×8-12</b></div>
+      <div class="ex"><span>Remada baixa (triângulo)</span><b>3×10-12</b></div>
+      <div class="ex"><span>Crucifixo / peck deck</span><b>3×10-15</b></div>
+      <div class="ex"><span>Barra fixa / puxada neutra</span><b>3×8-12</b></div>
+      <div class="ex"><span>Elevação lateral</span><b>4×12-20</b></div>
+      <div class="ex"><span>Face pull</span><b>3×15-20</b></div>
+      <div class="ex"><span>Tríceps testa / francês</span><b>3×10-15</b></div>
+      <div class="ex"><span>Rosca martelo</span><b>3×10-12</b></div>
+    </div>
+    <h3>Core + corretivo <span class="tag">2-3×/sem</span></h3>
+    <div class="card">
+      <div class="ex"><span>Prancha</span><b>3×30-45s</b></div>
+      <div class="ex"><span>Dead bug</span><b>3×8/lado</b></div>
+      <div class="ex"><span>Elevação de quadril / hip thrust</span><b>3×12-15</b></div>
+      <div class="ex"><span>Along. flexor de quadril</span><b>2×30s/lado</b></div>
+    </div>
+    <h3>Cardio</h3>
+    <div class="card">
+      <div class="ex"><span>Bike Zona 2</span><b>25-35′ · 2-3×</b></div>
+      <div class="ex"><span>Passos diários</span><b>8-10 mil</b></div>
+    </div>
+  </section>
+
+  <!-- ================= DIETA ================= -->
+  <section class="tab" id="tab-dieta">
+    <h2>Metas diárias <span class="tag">corte leve</span></h2>
+    <div class="card">
+      <div class="grid g2">
+        <div class="center card" style="margin:0;background:var(--card2)"><div class="big">~2400</div><div class="note">kcal</div></div>
+        <div class="center card" style="margin:0;background:var(--card2)"><div class="big">180g+</div><div class="note">proteína</div></div>
+        <div class="center card" style="margin:0;background:var(--card2)"><div class="big">~245g</div><div class="note">carboidrato</div></div>
+        <div class="center card" style="margin:0;background:var(--card2)"><div class="big">~75g</div><div class="note">gordura</div></div>
+      </div>
+      <div class="callout" style="margin-bottom:0"><b>Regra de ouro:</b> pese-se 3-4×/sem de manhã e veja a média semanal. Cai ~0,3-0,5 kg/sem → mantém. Não cai em 2-3 sem → corta 150-200 kcal.</div>
+    </div>
+
+    <h2>Dia exemplo (em gramas)</h2>
+    <div class="card">
+      <table>
+        <tr><th>Refeição</th><th>O quê</th><th class="n">Aprox.</th></tr>
+        <tr><td><b>Café (shake)</b></td><td>40 g whey + 25 g farinha de aveia + 20 g pasta de amendoim + 200 ml leite/água</td><td class="n">485 kcal<br>47P</td></tr>
+        <tr><td><b>Almoço</b></td><td>150 g frango + 300 g arroz cozido + 100 g feijão + 10 ml azeite</td><td class="n">840 kcal<br>62P</td></tr>
+        <tr><td><b>Lanche</b></td><td>30 g whey + 40 g farelo de aveia (na água)</td><td class="n">270 kcal<br>31P</td></tr>
+        <tr><td><b>Jantar</b></td><td>150 g patinho + 200 g arroz cozido + 2 ovos</td><td class="n">650 kcal<br>57P</td></tr>
+      </table>
+      <div class="note" style="margin-top:8px">Base ≈ 2.245 kcal · 197P · 220C · 58F. Ajuste: <b>+arroz</b> p/ carbo · <b>+azeite/pasta</b> p/ gordura.</div>
+    </div>
+
+    <h2>Trocas de carne <span class="tag">~47g proteína</span></h2>
+    <div class="card">
+      <table>
+        <tr><th>Carne</th><th class="n">Cozido</th><th class="n">kcal</th><th class="n">Gord.</th></tr>
+        <tr><td>Frango (peito) <i>ref.</i></td><td class="n">150 g</td><td class="n">248</td><td class="n">5g</td></tr>
+        <tr><td>Tilápia / peixe branco</td><td class="n">180 g</td><td class="n">230</td><td class="n">4g</td></tr>
+        <tr><td>Patinho / coxão mole</td><td class="n">175 g</td><td class="n">305</td><td class="n">10g</td></tr>
+        <tr><td>Lombo suíno</td><td class="n">168 g</td><td class="n">310</td><td class="n">12g</td></tr>
+        <tr><td>Filé mignon</td><td class="n">160 g</td><td class="n">325</td><td class="n">13g</td></tr>
+        <tr><td>Alcatra</td><td class="n">168 g</td><td class="n">315</td><td class="n">12g</td></tr>
+        <tr><td>Carne moída (magra)</td><td class="n">180 g</td><td class="n">340</td><td class="n">16g</td></tr>
+        <tr><td>Sobrecoxa s/ pele</td><td class="n">180 g</td><td class="n">375</td><td class="n">18g</td></tr>
+        <tr><td>Salmão</td><td class="n">185 g</td><td class="n">430</td><td class="n">24g</td></tr>
+      </table>
+      <div class="callout warn" style="margin-bottom:0">Cortes gordos somam calorias. Trocou? Desconte gordura em outro ponto. Filé mignon no lugar do frango ≈ +75 kcal.</div>
+    </div>
+
+    <h2>Trocas de carboidrato <span class="tag">~56g carbo</span></h2>
+    <div class="card">
+      <table>
+        <tr><th>Carboidrato</th><th class="n">Cozido</th><th class="n">kcal</th></tr>
+        <tr><td>Arroz branco <i>ref.</i></td><td class="n">200 g</td><td class="n">260</td></tr>
+        <tr><td>Batata-doce</td><td class="n">280 g</td><td class="n">240</td></tr>
+        <tr><td>Batata inglesa</td><td class="n">330 g</td><td class="n">255</td></tr>
+        <tr><td>Mandioca / aipim</td><td class="n">185 g</td><td class="n">235</td></tr>
+        <tr><td>Inhame</td><td class="n">240 g</td><td class="n">235</td></tr>
+        <tr><td>Cuscuz (milho)</td><td class="n">225 g</td><td class="n">250</td></tr>
+        <tr><td>Macarrão</td><td class="n">225 g</td><td class="n">290 (+6P)</td></tr>
+        <tr><td>Tapioca (goma)</td><td class="n">90 g</td><td class="n">240</td></tr>
+        <tr><td>Pão francês</td><td class="n">100 g (2 un.)</td><td class="n">270 (+8P)</td></tr>
+      </table>
+    </div>
+
+    <h2>Suplementos & atenção</h2>
+    <div class="card">
+      <div class="callout"><b>Whey:</b> seguro diariamente. Teto ~2-3 doses/dia (~70 g de pó). Use pra <i>fechar</i> a proteína, não como base.</div>
+      <div class="callout warn" style="margin-bottom:0"><b>Sem vegetais/frutas → cubra o buraco:</b> multivitamínico + ômega-3 + vitamina D (idealmente ajustada por exame). Fibra: farelo de aveia + feijão; psyllium se precisar. Confirme dosagens com seu médico.</div>
+    </div>
+  </section>
+
+  <!-- ================= DADOS ================= -->
+  <section class="tab" id="tab-dados">
+    <h2>Backup dos dados</h2>
+    <div class="card">
+      <div class="note">Os registros ficam salvos neste navegador automaticamente. Para não perder ao trocar de aparelho, baixe um backup e importe no outro device.</div>
+      <button class="btn" onclick="exportData()">⬇️ Baixar backup (.json)</button>
+      <button class="btn ghost" onclick="document.getElementById('importFile').click()">⬆️ Importar backup</button>
+      <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importData(event)">
+      <div class="hr"></div>
+      <div class="note" id="storageStatus"></div>
+      <button class="btn ghost" style="border-color:var(--bad);color:var(--bad)" onclick="resetData()">Apagar todos os registros</button>
+    </div>
+    <div class="card">
+      <div class="note">Estatísticas gerais</div>
+      <div id="stats" style="margin-top:6px"></div>
+    </div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<nav>
+  <button class="active" data-tab="hoje" onclick="showTab('hoje',this)"><span class="ic">✅</span>Hoje</button>
+  <button data-tab="cal" onclick="showTab('cal',this)"><span class="ic">📅</span>Calendário</button>
+  <button data-tab="semanas" onclick="showTab('semanas',this)"><span class="ic">📊</span>Semanas</button>
+  <button data-tab="treino" onclick="showTab('treino',this)"><span class="ic">🏋️</span>Treino</button>
+  <button data-tab="dieta" onclick="showTab('dieta',this)"><span class="ic">🍽️</span>Dieta</button>
+  <button data-tab="dados" onclick="showTab('dados',this)"><span class="ic">💾</span>Dados</button>
+</nav>
+
+<script>
+"use strict";
+// ---------- ícone do app + manifest (tudo embutido) ----------
+const APP_ICON="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADAAgMAAAAvsoSUAAAACVBMVEXn7fNMwv8PFBnkpFrjAAABGklEQVR42u3YMY6DMBCF4d9WVqKk2T51TsEl2DpH8XFWS7NH4CgcgSpaaaOQIiHGNhMpUYoUb6QUEfPNgMEahPvhsfAICAgICAgICAgICAgImLFZ/vnCfxcZhz27sN7hBKey5ACDcUp/QChAuBxYAwNpsblt0tentZJit7aEV6xSh7Oz/js+m7TDBJMNRhizUzoCjQmaS8ISjEBt5Tti/xn0+V0vLrTXBnpyAwFTlz8VWiUBgTfaoq7NR9yvVul50BCnUhFH4kCbQU2ce0VM17G1BJs4lFaij3fYx7l3Z07XcWLeHo0W7O/NH+1rljUAVZ5Q3Xk52V5/RUVvdKisF6zKAH71krZpW6dP8QICAgICAgICAgICAnacATpALn5xttDQAAAAAElFTkSuQmCC";
+(function(){
+  function addLink(rel,href){ const l=document.createElement("link"); l.rel=rel; l.href=href; document.head.appendChild(l); }
+  addLink("icon",APP_ICON);
+  addLink("apple-touch-icon",APP_ICON);
+  try{
+    const mani={name:"Meu Plano — Fase 1",short_name:"Meu Plano",display:"standalone",orientation:"portrait",background_color:"#0f1419",theme_color:"#0f1419",start_url:location.href,icons:[{src:APP_ICON,sizes:"192x192",type:"image/png",purpose:"any maskable"}]};
+    addLink("manifest",URL.createObjectURL(new Blob([JSON.stringify(mani)],{type:"application/manifest+json"})));
+  }catch(e){}
+})();
+const KEY="meuPlanoFase1_v2";
+const FREE_MAX=2;
+const CYCLE_WEEKS=14;
+const SUPPS=["vitD","b12","multi","creatina","sono"];
+
+const ROUTINES={
+  A:{name:"Superior A",ex:[
+    {name:"Supino reto (barra/halt.)",sets:3,reps:"6-10"},
+    {name:"Remada curvada (barra)",sets:3,reps:"8-12"},
+    {name:"Desenvolvimento halteres",sets:3,reps:"8-12"},
+    {name:"Puxada alta (pegada aberta)",sets:3,reps:"8-12"},
+    {name:"Elevação lateral",sets:4,reps:"12-20"},
+    {name:"Tríceps corda",sets:3,reps:"10-15"},
+    {name:"Rosca direta",sets:3,reps:"8-12"}
+  ]},
+  Inf:{name:"Inferior",ex:[
+    {name:"Agachamento",sets:3,reps:"6-10"},
+    {name:"Leg press",sets:3,reps:"10-15"},
+    {name:"Levantamento terra romeno",sets:3,reps:"8-12"},
+    {name:"Cadeira flexora",sets:3,reps:"10-15"},
+    {name:"Cadeira extensora",sets:2,reps:"12-15"},
+    {name:"Elevação pélvica / hip thrust",sets:3,reps:"12-15"},
+    {name:"Panturrilha em pé",sets:4,reps:"12-20"}
+  ]},
+  B:{name:"Superior B",ex:[
+    {name:"Supino inclinado halteres",sets:3,reps:"8-12"},
+    {name:"Remada baixa (triângulo)",sets:3,reps:"10-12"},
+    {name:"Crucifixo / peck deck",sets:3,reps:"10-15"},
+    {name:"Barra fixa / puxada neutra",sets:3,reps:"8-
